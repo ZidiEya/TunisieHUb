@@ -1,17 +1,22 @@
+import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
 import BlogArticles from "@/components/BlogArticles";
 import ChatWidget from "@/components/ChatWidget";
 
 const Index = () => {
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
+  const openChat = () => setIsChatOpen(true);
+
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
+      <Navigation onChatOpen={openChat} />
       <main>
         <HeroSection />
         <BlogArticles />
       </main>
-      <ChatWidget />
+      <ChatWidget isOpen={isChatOpen} onOpenChange={setIsChatOpen} />
       
       {/* Footer */}
       <footer className="bg-gradient-hero text-white py-12">

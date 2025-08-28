@@ -2,7 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Menu, MessageCircle, BookOpen, Users, Home } from "lucide-react";
 import { useState } from "react";
 
-const Navigation = () => {
+interface NavigationProps {
+  onChatOpen?: () => void;
+}
+
+const Navigation = ({ onChatOpen }: NavigationProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
@@ -40,7 +44,7 @@ const Navigation = () => {
 
           {/* Chat Button */}
           <div className="hidden md:block">
-            <Button variant="chat" size="sm">
+            <Button variant="chat" size="sm" onClick={onChatOpen}>
               <MessageCircle className="w-4 h-4" />
               مساعد الكتابة
             </Button>
@@ -76,7 +80,7 @@ const Navigation = () => {
               <a href="/about" className="text-foreground hover:text-tunisia-orange transition-smooth">
                 حول الموقع
               </a>
-              <Button variant="chat" size="sm" className="self-start">
+              <Button variant="chat" size="sm" className="self-start" onClick={onChatOpen}>
                 <MessageCircle className="w-4 h-4" />
                 مساعد الكتابة
               </Button>

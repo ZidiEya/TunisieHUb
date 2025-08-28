@@ -29,8 +29,14 @@ import {
   Sparkles
 } from "lucide-react";
 
-const ChatWidget = () => {
-  const [isOpen, setIsOpen] = useState(false);
+interface ChatWidgetProps {
+  isOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+
+const ChatWidget = ({ isOpen: externalIsOpen, onOpenChange }: ChatWidgetProps = {}) => {
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
   const [isTyping, setIsTyping] = useState(false);
   const [activeTab, setActiveTab] = useState('chat'); // 'chat', 'templates', 'stats'
   const [messages, setMessages] = useState([
@@ -197,7 +203,13 @@ const ChatWidget = () => {
           variant="chat"
           size="lg"
           className="fixed bottom-6 right-6 z-50 shadow-glow w-16 h-16"
-          onClick={() => setIsOpen(true)}
+          onClick={() => {
+            if (onOpenChange) {
+              onOpenChange(true);
+            } else {
+              setInternalIsOpen(true);
+            }
+          }}
         >
           <MessageCircle className="w-6 h-6" />
         </Button>
@@ -221,7 +233,13 @@ const ChatWidget = () => {
                 variant="ghost"
                 size="icon"
                 className="text-white hover:bg-white/20"
-                onClick={() => setIsOpen(false)}
+                onClick={() => {
+                  if (onOpenChange) {
+                    onOpenChange(false);
+                  } else {
+                    setInternalIsOpen(false);
+                  }
+                }}
               >
                 <X className="w-4 h-4" />
               </Button>
