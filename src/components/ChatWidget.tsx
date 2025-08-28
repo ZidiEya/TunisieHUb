@@ -50,6 +50,7 @@ const ChatWidget = ({ isOpen: externalIsOpen, onOpenChange }: ChatWidgetProps = 
   ]);
   const [inputMessage, setInputMessage] = useState('');
   const [isListening, setIsListening] = useState(false);
+  const [editingMessageId, setEditingMessageId] = useState<number | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -95,6 +96,24 @@ const ChatWidget = ({ isOpen: externalIsOpen, onOpenChange }: ChatWidgetProps = 
   const handleSendMessage = () => {
     if (!inputMessage.trim()) return;
 
+    // Handle commands
+    if (inputMessage.startsWith('/')) {
+      handleCommand(inputMessage);
+      return;
+    }
+
+    // Handle editing existing message
+    if (editingMessageId !== null) {
+      setMessages(messages.map(msg => 
+        msg.id === editingMessageId 
+          ? { ...msg, content: inputMessage, timestamp: new Date() }
+          : msg
+      ));
+      setEditingMessageId(null);
+      setInputMessage('');
+      return;
+    }
+
     const newMessage = {
       id: Date.now(),
       type: 'user',
@@ -120,6 +139,120 @@ const ChatWidget = ({ isOpen: externalIsOpen, onOpenChange }: ChatWidgetProps = 
       setMessages(prev => [...prev, botResponse]);
       setIsTyping(false);
     }, 1500);
+  };
+
+  const handleCommand = (command: string) => {
+    const parts = command.split(' ');
+    const cmd = parts[0].toLowerCase();
+    
+    switch (cmd) {
+      case '/delete':
+        if (parts[1] === 'all') {
+          // Keep only the initial bot message
+          setMessages(messages.slice(0, 1));
+          const botResponse = {
+            id: Date.now(),
+            type: 'bot',
+            content: '✅ تم حذف جميع الرسائل بنجاح!',
+            timestamp: new Date(),
+            rating: null
+          };
+          setMessages(prev => [...prev.slice(0, 1), botResponse]);
+        } else if (parts[1]) {
+          const messageId = parseInt(parts[1]);
+          const messageToDelete = messages.find(msg => msg.id === messageId);
+          if (messageToDelete) {
+            setMessages(messages.filter(msg => msg.id !== messageId));
+            const botResponse = {
+              id: Date.now(),
+              type: 'bot',
+              content: '✅ تم حذف الرسالة بنجاح!',
+              timestamp: new Date(),
+              rating: null
+            };
+            setMessages(prev => [...prev.filter(msg => msg.id !== messageId), botResponse]);
+          } else {
+            const botResponse = {
+              id: Date.now(),
+              type: 'bot',
+              content: '❌ لم يتم العثور على الرسالة المطلوبة.',
+              timestamp: new Date(),
+              rating: null
+            };
+            setMessages(prev => [...prev, botResponse]);
+          }
+        } else {
+          const botResponse = {
+            id: Date.now(),
+            type: 'bot',
+            content: '💡 **أوامر الحذف المتاحة:**\n\n• `/delete all` - حذف جميع الرسائل\n• `/delete [ID]` - حذف رسالة محددة\n\nيمكنك رؤية ID الرسالة بالضغط على الرسالة.',
+            timestamp: new Date(),
+            rating: null
+          };
+          setMessages(prev => [...prev, botResponse]);
+        }
+        break;
+        
+      case '/update':
+        if (parts[1]) {
+          const messageId = parseInt(parts[1]);
+          const messageToEdit = messages.find(msg => msg.id === messageId && msg.type === 'user');
+          if (messageToEdit) {
+            setEditingMessageId(messageId);
+            setInputMessage(messageToEdit.content);
+            const botResponse = {
+              id: Date.now(),
+              type: 'bot',
+              content: `✏️ جاري تعديل الرسالة. اكتب المحتوى الجديد واضغط إرسال.`,
+              timestamp: new Date(),
+              rating: null
+            };
+            setMessages(prev => [...prev, botResponse]);
+          } else {
+            const botResponse = {
+              id: Date.now(),
+              type: 'bot',
+              content: '❌ لم يتم العثور على الرسالة أو لا يمكن تعديلها.',
+              timestamp: new Date(),
+              rating: null
+            };
+            setMessages(prev => [...prev, botResponse]);
+          }
+        } else {
+          const botResponse = {
+            id: Date.now(),
+            type: 'bot',
+            content: '💡 **أمر التعديل:**\n\n• `/update [ID]` - تعديل رسالة محددة\n\nيمكنك رؤية ID الرسالة بالضغط على الرسالة.',
+            timestamp: new Date(),
+            rating: null
+          };
+          setMessages(prev => [...prev, botResponse]);
+        }
+        break;
+        
+      case '/help':
+        const botResponse = {
+          id: Date.now(),
+          type: 'bot',
+          content: '🤖 **الأوامر المتاحة:**\n\n• `/delete all` - حذف جميع الرسائل\n• `/delete [ID]` - حذف رسالة محددة\n• `/update [ID]` - تعديل رسالة محددة\n• `/help` - عرض هذه القائمة\n\nيمكنك الضغط على أي رسالة لرؤية ID الخاص بها.',
+          timestamp: new Date(),
+          rating: null
+        };
+        setMessages(prev => [...prev, botResponse]);
+        break;
+        
+      default:
+        const errorResponse = {
+          id: Date.now(),
+          type: 'bot',
+          content: `❌ أمر غير معروف: ${cmd}\n\nاكتب \`/help\` لرؤية الأوامر المتاحة.`,
+          timestamp: new Date(),
+          rating: null
+        };
+        setMessages(prev => [...prev, errorResponse]);
+    }
+    
+    setInputMessage('');
   };
 
   const getIntelligentResponse = (userMessage: string) => {
@@ -186,6 +319,17 @@ const ChatWidget = ({ isOpen: externalIsOpen, onOpenChange }: ChatWidgetProps = 
 
   const copyMessage = (content: string) => {
     navigator.clipboard.writeText(content);
+  };
+
+  const showMessageId = (messageId: number) => {
+    const botResponse = {
+      id: Date.now(),
+      type: 'bot',
+      content: `📋 **معرف الرسالة:** ${messageId}\n\nيمكنك استخدام هذا المعرف مع الأوامر:\n• \`/delete ${messageId}\` - لحذف الرسالة\n• \`/update ${messageId}\` - لتعديل الرسالة`,
+      timestamp: new Date(),
+      rating: null
+    };
+    setMessages(prev => [...prev, botResponse]);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -316,13 +460,14 @@ const ChatWidget = ({ isOpen: externalIsOpen, onOpenChange }: ChatWidgetProps = 
                             message.type === 'user' ? 'order-2' : 'order-1'
                           }`}
                         >
-                          <div
-                            className={`p-3 rounded-2xl ${
-                              message.type === 'user'
-                                ? 'bg-tunisia-orange text-white rounded-br-md'
-                                : 'bg-muted text-foreground rounded-bl-md shadow-sm'
-                            }`}
-                          >
+                           <div
+                             className={`p-3 rounded-2xl cursor-pointer ${
+                               message.type === 'user'
+                                 ? 'bg-tunisia-orange text-white rounded-br-md'
+                                 : 'bg-muted text-foreground rounded-bl-md shadow-sm'
+                             }`}
+                             onClick={() => showMessageId(message.id)}
+                           >
                             <div className="flex items-start space-x-2">
                               {message.type === 'bot' && (
                                 <div className="w-6 h-6 bg-tunisia-orange/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -427,7 +572,7 @@ const ChatWidget = ({ isOpen: externalIsOpen, onOpenChange }: ChatWidgetProps = 
                         ref={inputRef}
                         value={inputMessage}
                         onChange={(e) => setInputMessage(e.target.value)}
-                        placeholder="اكتب رسالتك هنا... (اضغط Enter للإرسال)"
+                        placeholder={editingMessageId !== null ? "اكتب المحتوى الجديد..." : "اكتب رسالتك هنا... (اضغط Enter للإرسال)"}
                         onKeyDown={handleKeyPress}
                         className="min-h-[40px] max-h-[100px] resize-none pr-10"
                         rows={1}
