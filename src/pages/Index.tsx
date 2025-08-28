@@ -13,7 +13,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Navigation onChatOpen={openChat} />
       <main>
-        <HeroSection />
+        <HeroSection onChatOpen={openChat} />
         <BlogArticles />
       </main>
       <ChatWidget isOpen={isChatOpen} onOpenChange={setIsChatOpen} />

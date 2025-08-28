@@ -2,7 +2,11 @@ import { Button } from "@/components/ui/button";
 import { MessageCircle, PenTool, Lightbulb } from "lucide-react";
 import heroImage from "@/assets/hero-tunisia-blog.jpg";
 
-const HeroSection = () => {
+interface HeroSectionProps {
+  onChatOpen?: () => void;
+}
+
+const HeroSection = ({ onChatOpen }: HeroSectionProps) => {
   return (
     <section className="relative min-h-[600px] flex items-center justify-center overflow-hidden">
       {/* Background Image */}
@@ -28,11 +32,11 @@ const HeroSection = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-            <Button variant="hero" size="lg" className="text-lg px-8 py-4">
+            <Button variant="hero" size="lg" className="text-lg px-8 py-4" onClick={onChatOpen}>
               <PenTool className="w-5 h-5" />
               ابدأ الكتابة الآن
             </Button>
-            <Button variant="sunset" size="lg" className="text-lg px-8 py-4">
+            <Button variant="sunset" size="lg" className="text-lg px-8 py-4" onClick={onChatOpen}>
               <MessageCircle className="w-5 h-5" />
               جرب المساعد الذكي
             </Button>
