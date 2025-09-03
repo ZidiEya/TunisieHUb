@@ -38,6 +38,7 @@ const Articles = () => {
       author: "أحمد بن سالم",
       date: "15 ديسمبر 2024",
       readTime: "5 دقائق",
+      slug: "how-to-write-engaging-articles",
       featured: false
     },
     {

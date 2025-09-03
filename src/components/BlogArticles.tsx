@@ -42,6 +42,7 @@ const BlogArticles = () => {
       author: "محمد المطور",
       date: "13 ديسمبر 2024",
       readTime: "12 دقائق",
+      slug: "machine-learning-for-arab-developers",
       featured: false
     },
     {
@@ -52,6 +53,7 @@ const BlogArticles = () => {
       author: "فاطمة الزهراء",
       date: "12 ديسمبر 2024",
       readTime: "8 دقائق",
+      slug: "digital-marketing-strategies-small-business",
       featured: false
     },
     {
@@ -62,6 +64,7 @@ const BlogArticles = () => {
       author: "د. سارة التعليمية",
       date: "10 ديسمبر 2024",
       readTime: "8 دقائق",
+      slug: "ai-in-education-revolution-or-hype",
       featured: false
     },
     {
@@ -72,6 +75,7 @@ const BlogArticles = () => {
       author: "خالد الأمني",
       date: "8 ديسمبر 2024",
       readTime: "6 دقائق",
+      slug: "protect-your-data-from-ai-risks",
       featured: false
     },
     {
@@ -82,6 +86,7 @@ const BlogArticles = () => {
       author: "سارة بوجعفر",
       date: "7 ديسمبر 2024",
       readTime: "7 دقائق",
+      slug: "entrepreneurship-tunisia-success-stories",
       featured: false
     },
     {
@@ -92,6 +97,7 @@ const BlogArticles = () => {
       author: "ياسين الكريم",
       date: "5 ديسمبر 2024",
       readTime: "9 دقائق",
+      slug: "ai-impact-on-job-market",
       featured: false
     },
     {
@@ -102,6 +108,7 @@ const BlogArticles = () => {
       author: "عمر المبرمج",
       date: "3 ديسمبر 2024",
       readTime: "15 دقائق",
+      slug: "build-intelligent-chatbot-ai",
       featured: false
     },
     {
@@ -112,6 +119,7 @@ const BlogArticles = () => {
       author: "د. ليلى المستقبلية",
       date: "1 ديسمبر 2024",
       readTime: "11 دقائق",
+      slug: "ai-future-middle-east",
       featured: false
     }
   ];
