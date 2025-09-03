@@ -269,6 +269,19 @@ export type Database = {
         Args: { title: string }
         Returns: string
       }
+      get_public_comments: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          article_id: string
+          author_name: string
+          content: string
+          created_at: string
+          id: string
+          parent_id: string
+          status: string
+          updated_at: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
