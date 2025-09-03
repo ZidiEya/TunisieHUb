@@ -3,10 +3,14 @@ import ChatWidget from "@/components/ChatWidget";
 import { Button } from "@/components/ui/button";
 import { MessageCircle, PenTool, Lightbulb, Target, Users, Award } from "lucide-react";
 
-const About = () => {
+interface AboutProps {
+  onChatOpen: () => void;
+}
+
+const About = ({ onChatOpen }: AboutProps) => {
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
+      <Navigation onChatOpen={onChatOpen} />
       <main>
         {/* Hero Section */}
         <section className="bg-gradient-hero text-white py-20">
