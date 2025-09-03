@@ -1,22 +1,19 @@
-import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
 import BlogArticles from "@/components/BlogArticles";
-import ChatWidget from "@/components/ChatWidget";
 
-const Index = () => {
-  const [isChatOpen, setIsChatOpen] = useState(false);
+interface IndexProps {
+  onChatOpen: () => void;
+}
 
-  const openChat = () => setIsChatOpen(true);
-
+const Index = ({ onChatOpen }: IndexProps) => {
   return (
-    <div className="min-h-screen bg-background">
-      <Navigation onChatOpen={openChat} />
+    <>
+      <Navigation onChatOpen={onChatOpen} />
       <main>
-        <HeroSection onChatOpen={openChat} />
+        <HeroSection onChatOpen={onChatOpen} />
         <BlogArticles />
       </main>
-      <ChatWidget isOpen={isChatOpen} onOpenChange={setIsChatOpen} />
       
       {/* Footer */}
       <footer className="bg-gradient-hero text-white py-12">
@@ -51,7 +48,7 @@ const Index = () => {
           </div>
         </div>
       </footer>
-    </div>
+    </>
   );
 };
 

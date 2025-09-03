@@ -7,6 +7,10 @@ import { Calendar, User, Tag, ArrowLeft, Clock, Share2, Heart } from "lucide-rea
 import Navigation from "@/components/Navigation";
 import { useToast } from "@/hooks/use-toast";
 
+interface ArticleDetailProps {
+  onChatOpen: () => void;
+}
+
 interface Article {
   id: number;
   title: string;

@@ -152,8 +152,6 @@ const About = () => {
           </div>
         </section>
       </main>
-
-      <ChatWidget />
       
       {/* Footer */}
       <footer className="bg-gradient-hero text-white py-12">

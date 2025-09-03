@@ -17,7 +17,11 @@ import {
 } from "lucide-react";
 import Navigation from "@/components/Navigation";
 
-const Categories = () => {
+interface CategoriesProps {
+  onChatOpen: () => void;
+}
+
+const Categories = ({ onChatOpen }: CategoriesProps) => {
   const categoryStats = [
     {
       id: 1,
@@ -128,8 +132,8 @@ const Categories = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navigation />
+    <>
+      <Navigation onChatOpen={onChatOpen} />
       
       {/* Hero Section */}
       <section className="py-16 bg-gradient-hero text-white">
@@ -392,7 +396,7 @@ const Categories = () => {
           </div>
         </div>
       </footer>
-    </div>
+    </>
   );
 };
 

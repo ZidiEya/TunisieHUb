@@ -5,7 +5,11 @@ import { Input } from "@/components/ui/input";
 import { Calendar, User, Tag, ArrowRight, Search, Filter } from "lucide-react";
 import Navigation from "@/components/Navigation";
 
-const Articles = () => {
+interface ArticlesProps {
+  onChatOpen: () => void;
+}
+
+const Articles = ({ onChatOpen }: ArticlesProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("الكل");
 
@@ -133,8 +137,8 @@ const Articles = () => {
   });
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navigation />
+    <>
+      <Navigation onChatOpen={onChatOpen} />
       
       {/* Hero Section */}
       <section className="py-16 bg-gradient-hero text-white">
@@ -270,7 +274,7 @@ const Articles = () => {
           </div>
         </div>
       </footer>
-    </div>
+    </>
   );
 };
 

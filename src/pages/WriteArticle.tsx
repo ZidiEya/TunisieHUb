@@ -12,6 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Save, Eye } from "lucide-react";
+import Navigation from "@/components/Navigation";
 
 const articleSchema = z.object({
   title: z.string().min(1, "Le titre est requis").max(200, "Le titre ne peut pas dépasser 200 caractères"),
@@ -30,7 +31,11 @@ interface Category {
   name: string;
 }
 
-const WriteArticle = () => {
+interface WriteArticleProps {
+  onChatOpen: () => void;
+}
+
+const WriteArticle = ({ onChatOpen }: WriteArticleProps) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -190,7 +195,8 @@ const WriteArticle = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <Navigation onChatOpen={onChatOpen} />
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -364,7 +370,7 @@ const WriteArticle = () => {
           </form>
         </Form>
       </div>
-    </div>
+    </>
   );
 };
 
