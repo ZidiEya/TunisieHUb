@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, User, Tag, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const BlogArticles = () => {
   const articles = [
@@ -12,6 +13,7 @@ const BlogArticles = () => {
       author: "أحمد التكنولوجي",
       date: "20 ديسمبر 2024",
       readTime: "7 دقائق",
+      slug: "guide-chatgpt-content-creation",
       featured: true
     },
     {
@@ -22,6 +24,7 @@ const BlogArticles = () => {
       author: "فاطمة الذكية",
       date: "18 ديسمبر 2024",
       readTime: "10 دقائق",
+      slug: "ai-tools-for-startups",
       featured: true
     },
     {
@@ -32,6 +35,7 @@ const BlogArticles = () => {
       author: "أحمد بن سالم",
       date: "15 ديسمبر 2024",
       readTime: "5 دقائق",
+      slug: "how-to-write-engaging-articles",
       featured: false
     },
     {
@@ -165,9 +169,11 @@ const BlogArticles = () => {
                         {article.date}
                       </div>
                     </div>
-                    <Button variant="tunisia" size="sm">
-                      اقرأ المزيد
-                      <ArrowRight className="w-4 h-4" />
+                    <Button variant="tunisia" size="sm" asChild>
+                      <Link to={`/article/${article.slug}`}>
+                        اقرأ المزيد
+                        <ArrowRight className="w-4 h-4" />
+                      </Link>
                     </Button>
                   </div>
                 </CardContent>
@@ -204,8 +210,10 @@ const BlogArticles = () => {
                       <span>•</span>
                       <span>{article.date}</span>
                     </div>
-                    <Button variant="ghost" size="sm" className="text-tunisia-orange hover:text-tunisia-red">
-                      اقرأ
+                    <Button variant="ghost" size="sm" className="text-tunisia-orange hover:text-tunisia-red" asChild>
+                      <Link to={`/article/${article.slug}`}>
+                        اقرأ
+                      </Link>
                     </Button>
                   </div>
                 </CardContent>

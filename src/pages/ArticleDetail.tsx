@@ -23,7 +23,7 @@ interface Article {
   slug: string;
 }
 
-const ArticleDetail = () => {
+const ArticleDetail = ({ onChatOpen }: ArticleDetailProps) => {
   const { slug } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -144,7 +144,7 @@ const ArticleDetail = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
-        <Navigation />
+        <Navigation onChatOpen={onChatOpen} />
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-4xl mx-auto">
             <div className="animate-pulse">
@@ -167,7 +167,7 @@ const ArticleDetail = () => {
   if (!article) {
     return (
       <div className="min-h-screen bg-background">
-        <Navigation />
+        <Navigation onChatOpen={onChatOpen} />
         <div className="container mx-auto px-4 py-16 text-center">
           <h1 className="text-2xl font-bold mb-4">المقال غير موجود</h1>
           <p className="text-muted-foreground mb-8">لم يتم العثور على المقال المطلوب</p>
@@ -181,7 +181,7 @@ const ArticleDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
+      <Navigation onChatOpen={onChatOpen} />
       
       {/* Article Header */}
       <div className="bg-gradient-hero text-white py-12">
