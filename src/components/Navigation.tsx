@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Menu, MessageCircle, BookOpen, Users, Home } from "lucide-react";
+import { Menu, MessageCircle, BookOpen, Users, Home, PenTool } from "lucide-react";
 import { useState } from "react";
 
 interface NavigationProps {
@@ -36,6 +36,10 @@ const Navigation = ({ onChatOpen }: NavigationProps) => {
             <a href="/categories" className="flex items-center space-x-2 text-foreground hover:text-tunisia-orange transition-smooth">
               <Users className="w-4 h-4" />
               <span>الفئات</span>
+            </a>
+            <a href="/write" className="flex items-center space-x-2 text-foreground hover:text-tunisia-orange transition-smooth">
+              <PenTool className="w-4 h-4" />
+              <span>كتابة مقال</span>
             </a>
             <a href="/about" className="text-foreground hover:text-tunisia-orange transition-smooth">
               حول الموقع
@@ -76,6 +80,10 @@ const Navigation = ({ onChatOpen }: NavigationProps) => {
               <a href="/categories" className="flex items-center space-x-2 text-foreground hover:text-tunisia-orange transition-smooth">
                 <Users className="w-4 h-4" />
                 <span>الفئات</span>
+              </a>
+              <a href="/write" className="flex items-center space-x-2 text-foreground hover:text-tunisia-orange transition-smooth">
+                <PenTool className="w-4 h-4" />
+                <span>كتابة مقال</span>
               </a>
               <a href="/about" className="text-foreground hover:text-tunisia-orange transition-smooth">
                 حول الموقع
