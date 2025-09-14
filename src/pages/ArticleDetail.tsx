@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, User, Tag, ArrowLeft, Clock, Share2, Heart } from "lucide-react";
 import Navigation from "@/components/Navigation";
+import SocialShare from "@/components/SocialShare";
 import { useToast } from "@/hooks/use-toast";
 
 interface ArticleDetailProps {
@@ -290,14 +291,10 @@ const ArticleDetail = ({ onChatOpen }: ArticleDetailProps) => {
                 <Card>
                   <CardContent className="p-6">
                     <div className="space-y-3">
-                      <Button 
-                        className="w-full" 
-                        variant="tunisia"
-                        onClick={handleShare}
-                      >
-                        <Share2 className="w-4 h-4 ml-2" />
-                        مشاركة المقال
-                      </Button>
+                      <SocialShare 
+                        title={article.title}
+                        excerpt={article.excerpt}
+                      />
                       <Button 
                         className="w-full" 
                         variant="outline"
