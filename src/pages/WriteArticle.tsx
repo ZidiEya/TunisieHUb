@@ -13,13 +13,14 @@ import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Save, Eye } from "lucide-react";
 import Navigation from "@/components/Navigation";
+import { FileUpload } from "@/components/FileUpload";
 
 const articleSchema = z.object({
   title: z.string().min(1, "Le titre est requis").max(200, "Le titre ne peut pas dépasser 200 caractères"),
   content: z.string().min(1, "Le contenu est requis"),
   excerpt: z.string().optional(),
   categoryId: z.string().optional(),
-  featuredImageUrl: z.string().url("URL invalide").optional().or(z.literal("")),
+  featuredImageUrl: z.string().optional(),
   isFeatured: z.boolean().default(false),
   status: z.enum(["draft", "published"]).default("draft"),
 });
@@ -330,14 +331,17 @@ const WriteArticle = ({ onChatOpen }: WriteArticleProps) => {
                 name="featuredImageUrl"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Image à la une (URL)</FormLabel>
+                    <FormLabel>Image à la une</FormLabel>
                     <FormControl>
-                      <Input
-                        type="url"
-                        placeholder="https://example.com/image.jpg"
-                        {...field}
+                      <FileUpload
+                        onUpload={(url) => field.onChange(url)}
+                        currentImageUrl={field.value}
+                        maxSize={5}
                       />
                     </FormControl>
+                    <FormDescription>
+                      Téléchargez une image qui représente votre article
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
