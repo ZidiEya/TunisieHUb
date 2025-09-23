@@ -1,3 +1,12 @@
+/**
+ * ArticleDetail.tsx - Individual Article Display Page
+ * Page d'affichage d'article individuel
+ * 
+ * This component displays a single article with full content and social sharing
+ * Ce composant affiche un article unique avec contenu complet et partage social
+ */
+
+// React and routing imports / Importations React et routage
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -8,20 +17,28 @@ import Navigation from "@/components/Navigation";
 import SocialShare from "@/components/SocialShare";
 import { useToast } from "@/hooks/use-toast";
 
+/**
+ * Props interface for ArticleDetail component
+ * Interface des props pour le composant ArticleDetail
+ */
 interface ArticleDetailProps {
-  onChatOpen: () => void;
+  onChatOpen: () => void; // Function to open chat widget / Fonction pour ouvrir le widget de chat
 }
 
+/**
+ * Article interface for type safety
+ * Interface Article pour la sécurité des types
+ */
 interface Article {
-  id: number;
-  title: string;
-  content: string;
-  excerpt: string;
-  category: string;
-  author: string;
-  date: string;
-  readTime: string;
-  slug: string;
+  id: number; // Unique identifier / Identifiant unique
+  title: string; // Article title / Titre de l'article
+  content: string; // HTML content / Contenu HTML
+  excerpt: string; // Article summary / Résumé de l'article
+  category: string; // Article category / Catégorie de l'article
+  author: string; // Author name / Nom de l'auteur
+  date: string; // Publication date / Date de publication
+  readTime: string; // Estimated read time / Temps de lecture estimé
+  slug: string; // URL slug / Slug d'URL
 }
 
 const ArticleDetail = ({ onChatOpen }: ArticleDetailProps) => {

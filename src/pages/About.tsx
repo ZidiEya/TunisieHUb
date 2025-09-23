@@ -1,18 +1,39 @@
+/**
+ * About.tsx - About Page Component
+ * Composant de page À propos
+ * 
+ * This component displays the about page with mission, features, and values
+ * Ce composant affiche la page à propos avec la mission, les fonctionnalités et les valeurs
+ */
+
+// Component and UI imports / Importations de composants et UI
 import Navigation from "@/components/Navigation";
 import ChatWidget from "@/components/ChatWidget";
 import { Button } from "@/components/ui/button";
 import { MessageCircle, PenTool, Lightbulb, Target, Users, Award } from "lucide-react";
 
+/**
+ * Props interface for About component
+ * Interface des props pour le composant About
+ */
 interface AboutProps {
-  onChatOpen: () => void;
+  onChatOpen: () => void; // Function to open chat widget / Fonction pour ouvrir le widget de chat
 }
 
+/**
+ * About Component - Displays company information, mission, and values
+ * Composant About - Affiche les informations de l'entreprise, la mission et les valeurs
+ * 
+ * @param onChatOpen - Function to trigger chat widget opening / Fonction pour déclencher l'ouverture du widget de chat
+ */
 const About = ({ onChatOpen }: AboutProps) => {
   return (
     <div className="min-h-screen bg-background">
+      {/* Navigation bar / Barre de navigation */}
       <Navigation onChatOpen={onChatOpen} />
+      
       <main>
-        {/* Hero Section */}
+        {/* Hero Section - Main title and description / Section héro - Titre principal et description */}
         <section className="bg-gradient-hero text-white py-20">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
@@ -24,7 +45,7 @@ const About = ({ onChatOpen }: AboutProps) => {
           </div>
         </section>
 
-        {/* Mission Section */}
+        {/* Mission Section - Company mission and features / Section mission - Mission de l'entreprise et fonctionnalités */}
         <section className="py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center mb-16">
@@ -36,7 +57,7 @@ const About = ({ onChatOpen }: AboutProps) => {
               </p>
             </div>
 
-            {/* Features Grid */}
+            {/* Features Grid - Main feature cards / Grille de fonctionnalités - Cartes des fonctionnalités principales */}
             <div className="grid md:grid-cols-3 gap-8 mb-16">
               <div className="text-center p-8 rounded-lg bg-card border border-border">
                 <div className="w-16 h-16 bg-tunisia-orange/20 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -71,7 +92,7 @@ const About = ({ onChatOpen }: AboutProps) => {
           </div>
         </section>
 
-        {/* Values Section */}
+        {/* Values Section - Core company values / Section valeurs - Valeurs fondamentales de l'entreprise */}
         <section className="py-20 bg-muted/30">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
@@ -132,7 +153,7 @@ const About = ({ onChatOpen }: AboutProps) => {
           </div>
         </section>
 
-        {/* CTA Section */}
+        {/* CTA Section - Call to action / Section CTA - Appel à l'action */}
         <section className="py-20">
           <div className="container mx-auto px-4 text-center">
             <div className="max-w-3xl mx-auto">
@@ -157,7 +178,7 @@ const About = ({ onChatOpen }: AboutProps) => {
         </section>
       </main>
       
-      {/* Footer */}
+      {/* Footer - Site footer with links and contact / Pied de page - Pied de page du site avec liens et contact */}
       <footer className="bg-gradient-hero text-white py-12">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8">

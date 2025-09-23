@@ -1,31 +1,60 @@
+/**
+ * FileUpload.tsx - File Upload Component for Article Images
+ * Composant de téléchargement de fichiers pour les images d'articles
+ * 
+ * This component handles file uploads to Supabase Storage with validation and preview functionality
+ * Ce composant gère les téléchargements de fichiers vers Supabase Storage avec validation et prévisualisation
+ */
+
+// React and UI imports / Importations React et UI
 import { useState, useRef } from "react";
 import { Upload, X, Image } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
+/**
+ * Props interface for FileUpload component
+ * Interface des props pour le composant FileUpload
+ */
 interface FileUploadProps {
-  onUpload: (url: string) => void;
-  currentImageUrl?: string;
-  accept?: string;
-  maxSize?: number; // in MB
+  onUpload: (url: string) => void; // Callback when upload is complete / Callback lors de la fin du téléchargement
+  currentImageUrl?: string; // Current image URL for preview / URL de l'image actuelle pour la prévisualisation
+  accept?: string; // Accepted file types / Types de fichiers acceptés
+  maxSize?: number; // Maximum file size in MB / Taille maximale du fichier en MB
 }
 
+/**
+ * FileUpload Component - Handles file uploads with preview and validation
+ * Composant FileUpload - Gère les téléchargements de fichiers avec prévisualisation et validation
+ * 
+ * @param onUpload - Function called when upload completes / Fonction appelée lors de la fin du téléchargement
+ * @param currentImageUrl - Existing image URL / URL de l'image existante
+ * @param accept - File type filter / Filtre de type de fichier
+ * @param maxSize - Maximum file size in MB / Taille maximale du fichier en MB
+ */
 export const FileUpload = ({ 
   onUpload, 
   currentImageUrl, 
   accept = "image/*", 
   maxSize = 5 
 }: FileUploadProps) => {
-  const [uploading, setUploading] = useState(false);
-  const [preview, setPreview] = useState(currentImageUrl || "");
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  // Component state management / Gestion de l'état du composant
+  const [uploading, setUploading] = useState(false); // Upload progress state / État de progression du téléchargement
+  const [preview, setPreview] = useState(currentImageUrl || ""); // Image preview URL / URL de prévisualisation de l'image
+  const fileInputRef = useRef<HTMLInputElement>(null); // Reference to hidden file input / Référence vers l'input de fichier caché
 
+  /**
+   * Handles file selection and upload process
+   * Gère la sélection et le processus de téléchargement de fichiers
+   * 
+   * @param event - File input change event / Événement de changement de l'input de fichier
+   */
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    // Validate file size
+    // Validate file size / Valider la taille du fichier
     if (file.size > maxSize * 1024 * 1024) {
       toast({
         title: "Erreur",
@@ -35,7 +64,7 @@ export const FileUpload = ({
       return;
     }
 
-    // Validate file type
+    // Validate file type / Valider le type de fichier
     if (!file.type.startsWith('image/')) {
       toast({
         title: "Erreur",
@@ -48,7 +77,7 @@ export const FileUpload = ({
     try {
       setUploading(true);
 
-      // Get current user session
+      // Get current user session / Obtenir la session utilisateur actuelle
       const { data: { session } } = await supabase.auth.getSession();
       if (!session?.user) {
         toast({
@@ -59,11 +88,11 @@ export const FileUpload = ({
         return;
       }
 
-      // Create unique filename with user ID and timestamp
+      // Create unique filename with user ID and timestamp / Créer un nom de fichier unique avec l'ID utilisateur et timestamp
       const fileExt = file.name.split('.').pop();
       const fileName = `${session.user.id}/${Date.now()}.${fileExt}`;
 
-      // Upload file to Supabase Storage
+      // Upload file to Supabase Storage / Télécharger le fichier vers Supabase Storage
       const { data, error } = await supabase.storage
         .from('article-images')
         .upload(fileName, file, {
@@ -81,7 +110,7 @@ export const FileUpload = ({
         return;
       }
 
-      // Get public URL
+      // Get public URL / Obtenir l'URL publique
       const { data: { publicUrl } } = supabase.storage
         .from('article-images')
         .getPublicUrl(data.path);
@@ -106,6 +135,10 @@ export const FileUpload = ({
     }
   };
 
+  /**
+   * Removes the current image preview and clears the upload
+   * Supprime la prévisualisation de l'image actuelle et efface le téléchargement
+   */
   const handleRemove = () => {
     setPreview("");
     onUpload("");
@@ -114,6 +147,10 @@ export const FileUpload = ({
     }
   };
 
+  /**
+   * Triggers the hidden file input click
+   * Déclenche le clic sur l'input de fichier caché
+   */
   const handleClick = () => {
     fileInputRef.current?.click();
   };
