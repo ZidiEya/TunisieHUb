@@ -1,9 +1,33 @@
+/**
+ * BlogArticles.tsx - Blog articles listing component
+ * Composant de liste des articles de blog
+ * 
+ * Displays featured and regular articles with metadata and navigation
+ * Affiche les articles vedettes et réguliers avec métadonnées et navigation
+ */
+
+// UI Components / Composants UI
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+
+// Icons / Icônes  
 import { Calendar, User, Tag, ArrowRight } from "lucide-react";
+
+// Routing / Routage
 import { Link } from "react-router-dom";
 
+/**
+ * BlogArticles Component - Displays categorized articles with different layouts
+ * Composant BlogArticles - Affiche les articles catégorisés avec différentes mises en page
+ * 
+ * Features separate sections for featured articles and regular articles
+ * Comprend des sections séparées pour les articles vedettes et les articles réguliers
+ */
 const BlogArticles = () => {
+  /**
+   * Static article data - In production, this would come from a database/API
+   * Données d'articles statiques - En production, cela viendrait d'une base de données/API
+   */
   const articles = [
     {
       id: 1,
@@ -128,21 +152,30 @@ const BlogArticles = () => {
     }
   ];
 
+  /**
+   * Filter articles by featured status for different display sections
+   * Filtrer les articles par statut vedette pour différentes sections d'affichage
+   */
   const featuredArticles = articles.filter(article => article.featured);
   const regularArticles = articles.filter(article => !article.featured);
 
   return (
     <section className="py-16 bg-gradient-to-b from-background to-desert-sand/20">
       <div className="container mx-auto px-4">
-        {/* Featured Articles */}
+        
+        {/* Featured Articles Section */}
+        {/* Section des Articles Vedettes */}
         <div className="mb-16">
           <h2 className="text-4xl font-bold text-center mb-2">المقالات المميزة</h2>
           <p className="text-muted-foreground text-center mb-12">أحدث وأهم المقالات من كتّابنا المتميزين</p>
           
+          {/* Featured Articles Grid - 2 columns on desktop */}
+          {/* Grille d'Articles Vedettes - 2 colonnes sur desktop */}
           <div className="grid md:grid-cols-2 gap-8">
             {featuredArticles.map((article) => (
               <Card key={article.id} className="overflow-hidden hover:shadow-warm transition-all duration-300 hover:-translate-y-1 bg-gradient-card">
                 <CardHeader className="pb-4">
+                  {/* Article metadata header / En-tête de métadonnées d'article */}
                   <div className="flex items-center justify-between mb-3">
                     <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-tunisia-orange text-white">
                       <Tag className="w-3 h-3 ml-1" />
@@ -150,14 +183,19 @@ const BlogArticles = () => {
                     </span>
                     <span className="text-sm text-muted-foreground">{article.readTime}</span>
                   </div>
+                  {/* Article title with hover effect / Titre d'article avec effet de survol */}
                   <h3 className="text-2xl font-bold hover:text-tunisia-orange transition-colors cursor-pointer">
                     {article.title}
                   </h3>
                 </CardHeader>
                 <CardContent>
+                  {/* Article excerpt / Extrait d'article */}
                   <p className="text-muted-foreground mb-6 leading-relaxed">
                     {article.excerpt}
                   </p>
+                  
+                  {/* Author and date info with read more button */}
+                  {/* Informations auteur et date avec bouton lire la suite */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4 text-sm text-muted-foreground">
                       <div className="flex items-center">
@@ -182,28 +220,41 @@ const BlogArticles = () => {
           </div>
         </div>
 
-        {/* Regular Articles */}
+        {/* Regular Articles Section */}
+        {/* Section des Articles Réguliers */}
         <div>
           <h2 className="text-3xl font-bold text-center mb-12">أحدث المقالات</h2>
           
+          {/* Regular Articles Grid - 3 columns on large screens */}
+          {/* Grille d'Articles Réguliers - 3 colonnes sur grands écrans */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {regularArticles.map((article) => (
               <Card key={article.id} className="overflow-hidden hover:shadow-elegant transition-all duration-300 hover:-translate-y-1">
                 <CardHeader className="pb-3">
+                  {/* Compact metadata for regular articles */}
+                  {/* Métadonnées compactes pour les articles réguliers */}
                   <div className="flex items-center justify-between mb-2">
                     <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-secondary text-secondary-foreground">
                       {article.category}
                     </span>
                     <span className="text-xs text-muted-foreground">{article.readTime}</span>
                   </div>
+                  
+                  {/* Article title with line clamping for consistent layout */}
+                  {/* Titre d'article avec limitation de lignes pour une mise en page cohérente */}
                   <h3 className="text-lg font-semibold hover:text-tunisia-orange transition-colors cursor-pointer line-clamp-2">
                     {article.title}
                   </h3>
                 </CardHeader>
                 <CardContent>
+                  {/* Truncated excerpt with line clamping */}
+                  {/* Extrait tronqué avec limitation de lignes */}
                   <p className="text-sm text-muted-foreground mb-4 line-clamp-3">
                     {article.excerpt}
                   </p>
+                  
+                  {/* Compact author info and read button */}
+                  {/* Informations auteur compactes et bouton de lecture */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2 text-xs text-muted-foreground">
                       <span>{article.author}</span>
@@ -222,6 +273,8 @@ const BlogArticles = () => {
           </div>
         </div>
 
+        {/* View All Articles Button */}
+        {/* Bouton Voir Tous les Articles */}
         <div className="text-center mt-12">
           <Button variant="outline" size="lg">
             عرض جميع المقالات
