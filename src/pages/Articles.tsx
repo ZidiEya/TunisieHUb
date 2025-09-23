@@ -1,12 +1,3 @@
-/**
- * Articles.tsx - Articles Listing Page Component  
- * Composant de page de liste d'articles
- * 
- * This component displays a filterable and searchable list of blog articles
- * Ce composant affiche une liste filtrante et recherchable d'articles de blog
- */
-
-// React and UI imports / Importations React et UI
 import { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,27 +5,14 @@ import { Input } from "@/components/ui/input";
 import { Calendar, User, Tag, ArrowRight, Search, Filter } from "lucide-react";
 import Navigation from "@/components/Navigation";
 
-/**
- * Props interface for Articles component
- * Interface des props pour le composant Articles
- */
 interface ArticlesProps {
-  onChatOpen: () => void; // Function to open chat widget / Fonction pour ouvrir le widget de chat
+  onChatOpen: () => void;
 }
 
-/**
- * Articles Component - Displays filterable article grid with search
- * Composant Articles - Affiche une grille d'articles filtrables avec recherche
- * 
- * @param onChatOpen - Function to trigger chat widget opening / Fonction pour déclencher l'ouverture du widget de chat
- */
 const Articles = ({ onChatOpen }: ArticlesProps) => {
-  // State for search and filtering / État pour la recherche et le filtrage
-  const [searchTerm, setSearchTerm] = useState(""); // Search query / Requête de recherche
-  const [selectedCategory, setSelectedCategory] = useState("الكل"); // Selected category filter / Filtre de catégorie sélectionnée
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("الكل");
 
-  // Sample articles data - in production this would come from database
-  // Données d'articles d'exemple - en production cela viendrait de la base de données
   const articles = [
     {
       id: 1,
@@ -149,10 +127,8 @@ const Articles = ({ onChatOpen }: ArticlesProps) => {
     }
   ];
 
-  // Available categories for filtering / Catégories disponibles pour le filtrage
   const categories = ["الكل", "ذكاء اصطناعي", "الكتابة", "تسويق", "ريادة أعمال"];
 
-  // Filter articles based on search and category / Filtrer les articles basés sur la recherche et la catégorie
   const filteredArticles = articles.filter(article => {
     const matchesSearch = article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          article.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
@@ -162,10 +138,9 @@ const Articles = ({ onChatOpen }: ArticlesProps) => {
 
   return (
     <>
-      {/* Navigation bar / Barre de navigation */}
       <Navigation onChatOpen={onChatOpen} />
       
-      {/* Hero Section - Page header / Section héro - En-tête de page */}
+      {/* Hero Section */}
       <section className="py-16 bg-gradient-hero text-white">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-5xl font-bold mb-4">المقالات</h1>
@@ -175,7 +150,7 @@ const Articles = ({ onChatOpen }: ArticlesProps) => {
         </div>
       </section>
 
-      {/* Search and Filter Section - Article filtering controls / Section recherche et filtre - Contrôles de filtrage d'articles */}
+      {/* Search and Filter Section */}
       <section className="py-8 bg-background border-b">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
@@ -209,7 +184,7 @@ const Articles = ({ onChatOpen }: ArticlesProps) => {
         </div>
       </section>
 
-      {/* Articles Grid - Main content grid / Grille d'articles - Grille de contenu principal */}
+      {/* Articles Grid */}
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

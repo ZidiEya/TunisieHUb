@@ -1,12 +1,3 @@
-/**
- * Auth.tsx - Authentication Page Component
- * Composant de page d'authentification
- * 
- * This component handles user login and registration with form validation
- * Ce composant gère la connexion et l'inscription des utilisateurs avec validation de formulaire
- */
-
-// React and form imports / Importations React et formulaire  
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -20,12 +11,8 @@ import Navigation from "@/components/Navigation";
 import { PenTool, Mail, Lock, User } from 'lucide-react';
 import { toast } from 'sonner';
 
-/**
- * Props interface for Auth component
- * Interface des props pour le composant Auth
- */
 interface AuthProps {
-  onChatOpen: () => void; // Function to open chat widget / Fonction pour ouvrir le widget de chat
+  onChatOpen: () => void;
 }
 
 const Auth = ({ onChatOpen }: AuthProps) => {
