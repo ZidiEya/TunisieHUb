@@ -19,15 +19,15 @@ Tunisia Smart Content Hub is a culturally inspired blogging platform tailored fo
     🧰 Built With
 
                           Technology	Description	
-⚡ Vite   --	Fast build tool for modern web apps with lightning-speed HMR	
+⚡ Vite │   --	Fast build tool for modern web apps with lightning-speed HMR	
 
-📘 TypeScript	Strongly typed language for scalable and maintainable code	
+📘 TypeScript	│ Strongly typed language for scalable and maintainable code	
 
-⚛️ React	Component-based UI library for building interactive interfaces	
+⚛️ React	│ Component-based UI library for building interactive interfaces	
 
-🧩 shadcn/ui	Beautiful, accessible UI components built on Radix and Tailwind	
+🧩 shadcn/ui	│ Beautiful, accessible UI components built on Radix and Tailwind	
 
-🎨 Tailwind CSS	Utility-first CSS framework for rapid and responsive design	
+🎨 Tailwind CSS│ 	Utility-first CSS framework for rapid and responsive design	
 
 
 ---
@@ -44,22 +44,55 @@ Tunisia Smart Content Hub is a culturally inspired blogging platform tailored fo
 
 ## 📂 Project Structure
 src/
+
 ├── components/ # Reusable UI components
+
+
 │ ├── ui/ # shadcn/ui base components
+
+
 │ ├── Navigation.tsx
+
+
 │ ├── HeroSection.tsx
+
+
 │ ├── BlogArticles.tsx
+
+
 │ ├── SocialShare.tsx
+
+
 │ └── ChatWidget.tsx
+
+
 ├── contexts/ # Global state
+
+
 │ └── AuthContext.tsx
+
+
 ├── pages/ # Application pages
+
+
 │ ├── Index.tsx
+
+
 │ ├── Articles.tsx
+
+
 │ ├── Auth.tsx
+
+
 │ ├── WriteArticle.tsx
+
+
 │ └── Categories.tsx
+
+
 └── integrations/ # External integrations
+
+
 └── supabase/
                                          
                                          
