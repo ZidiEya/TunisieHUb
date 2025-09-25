@@ -78,7 +78,6 @@ const App = () => {
                 <Route path="/about" element={<About onChatOpen={openChat} />} />
                 <Route path="/articles" element={<Articles onChatOpen={openChat} />} />
                 <Route path="/blog" element={<Articles onChatOpen={openChat} />} />
-                <Route path="/article/:slug" element={<ArticleDetail onChatOpen={openChat} />} />
                 <Route path="/categories" element={<Categories onChatOpen={openChat} />} />
                 <Route path="/auth" element={<Auth onChatOpen={openChat} />} />
                 
