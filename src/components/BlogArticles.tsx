@@ -6,15 +6,36 @@
  * Affiche les articles vedettes et réguliers avec métadonnées et navigation
  */
 
+// React hooks / Hooks React
+import { useState, useEffect } from "react";
+
 // UI Components / Composants UI
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 // Icons / Icônes  
-import { Calendar, User, Tag, ArrowRight } from "lucide-react";
+import { Calendar, User, Tag, ArrowRight, Loader2 } from "lucide-react";
 
 // Routing / Routage
 import { Link } from "react-router-dom";
+
+// Supabase client / Client Supabase
+import { supabase } from "@/integrations/supabase/client";
+
+/**
+ * Article type definition / Définition du type d'article
+ */
+interface Article {
+  id: string;
+  title: string;
+  excerpt: string;
+  category: string;
+  author: string;
+  date: string;
+  readTime: string;
+  slug: string;
+  featured: boolean;
+}
 
 /**
  * BlogArticles Component - Displays categorized articles with different layouts
@@ -24,133 +45,109 @@ import { Link } from "react-router-dom";
  * Comprend des sections séparées pour les articles vedettes et les articles réguliers
  */
 const BlogArticles = () => {
+  // State management for articles and pagination / Gestion d'état pour les articles et la pagination
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(0);
+  const articlesPerPage = 6;
+
   /**
-   * Static article data - In production, this would come from a database/API
-   * Données d'articles statiques - En production, cela viendrait d'une base de données/API
+   * Fetch articles from Supabase database
+   * Récupérer les articles de la base de données Supabase
    */
-  const articles = [
-    {
-      id: 1,
-      title: "دليل المبتدئين لاستخدام ChatGPT في إنشاء المحتوى",
-      excerpt: "تعلم كيفية الاستفادة من قوة الذكاء الاصطناعي لإنشاء محتوى إبداعي ومؤثر باللغة العربية",
-      category: "ذكاء اصطناعي",
-      author: "أحمد التكنولوجي",
-      date: "20 ديسمبر 2024",
-      readTime: "7 دقائق",
-      slug: "guide-chatgpt-content-creation",
-      featured: true
-    },
-    {
-      id: 2,
-      title: "أدوات الذكاء الاصطناعي التي تحتاجها كل شركة ناشئة",
-      excerpt: "استكشف أفضل أدوات الذكاء الاصطناعي المجانية والمدفوعة لتطوير أعمالك وزيادة الإنتاجية",
-      category: "ذكاء اصطناعي",
-      author: "فاطمة الذكية",
-      date: "18 ديسمبر 2024",
-      readTime: "10 دقائق",
-      slug: "ai-tools-for-startups",
-      featured: true
-    },
-    {
-      id: 3,
-      title: "كيف تكتب مقالاً مؤثراً يجذب القراء",
-      excerpt: "تعلم الطرق الفعالة لكتابة محتوى يثير اهتمام جمهورك ويحقق انتشاراً واسعاً على وسائل التواصل الاجتماعي",
-      category: "الكتابة",
-      author: "أحمد بن سالم",
-      date: "15 ديسمبر 2024",
-      readTime: "5 دقائق",
-      slug: "how-to-write-engaging-articles",
-      featured: false
-    },
-    {
-      id: 4,
-      title: "تعلم الآلة: مقدمة للمطورين العرب",
-      excerpt: "دليل شامل لفهم أساسيات تعلم الآلة وكيفية البدء في هذا المجال المتنامي",
-      category: "ذكاء اصطناعي",
-      author: "محمد المطور",
-      date: "13 ديسمبر 2024",
-      readTime: "12 دقائق",
-      slug: "machine-learning-for-arab-developers",
-      featured: false
-    },
-    {
-      id: 5,
-      title: "استراتيجيات التسويق الرقمي للمشاريع الصغيرة",
-      excerpt: "دليل شامل للمشاريع الناشئة في تونس لبناء حضور رقمي قوي وزيادة المبيعات",
-      category: "تسويق",
-      author: "فاطمة الزهراء",
-      date: "12 ديسمبر 2024",
-      readTime: "8 دقائق",
-      slug: "digital-marketing-strategies-small-business",
-      featured: false
-    },
-    {
-      id: 6,
-      title: "الذكاء الاصطناعي في التعليم: ثورة حقيقية أم مجرد ضجيج؟",
-      excerpt: "نظرة عميقة على تطبيقات الذكاء الاصطناعي في التعليم وتأثيرها على المستقبل",
-      category: "ذكاء اصطناعي",
-      author: "د. سارة التعليمية",
-      date: "10 ديسمبر 2024",
-      readTime: "8 دقائق",
-      slug: "ai-in-education-revolution-or-hype",
-      featured: false
-    },
-    {
-      id: 7,
-      title: "كيف تحمي بياناتك من مخاطر الذكاء الاصطناعي",
-      excerpt: "نصائح عملية لحماية خصوصيتك وبياناتك الشخصية في عصر الذكاء الاصطناعي",
-      category: "ذكاء اصطناعي",
-      author: "خالد الأمني",
-      date: "8 ديسمبر 2024",
-      readTime: "6 دقائق",
-      slug: "protect-your-data-from-ai-risks",
-      featured: false
-    },
-    {
-      id: 8,
-      title: "ريادة الأعمال في تونس: قصص نجاح ملهمة",
-      excerpt: "تجارب رواد أعمال تونسيين حققوا نجاحاً باهراً في مختلف المجالات",
-      category: "ريادة أعمال",
-      author: "سارة بوجعفر",
-      date: "7 ديسمبر 2024",
-      readTime: "7 دقائق",
-      slug: "entrepreneurship-tunisia-success-stories",
-      featured: false
-    },
-    {
-      id: 9,
-      title: "الذكاء الاصطناعي وتأثيره على سوق العمل",
-      excerpt: "كيف يمكن للمهنيين التونسيين التكيف مع التطورات الجديدة في عالم التكنولوجيا",
-      category: "ذكاء اصطناعي",
-      author: "ياسين الكريم",
-      date: "5 ديسمبر 2024",
-      readTime: "9 دقائق",
-      slug: "ai-impact-on-job-market",
-      featured: false
-    },
-    {
-      id: 10,
-      title: "بناء روبوت دردشة ذكي باستخدام تقنيات الذكاء الاصطناعي",
-      excerpt: "دليل عملي لإنشاء روبوت دردشة متطور يفهم اللغة العربية ويقدم إجابات مفيدة",
-      category: "ذكاء اصطناعي",
-      author: "عمر المبرمج",
-      date: "3 ديسمبر 2024",
-      readTime: "15 دقائق",
-      slug: "build-intelligent-chatbot-ai",
-      featured: false
-    },
-    {
-      id: 11,
-      title: "مستقبل الذكاء الاصطناعي في الشرق الأوسط",
-      excerpt: "توقعات وتحليلات حول اتجاهات الذكاء الاصطناعي في المنطقة العربية والفرص المتاحة",
-      category: "ذكاء اصطناعي",
-      author: "د. ليلى المستقبلية",
-      date: "1 ديسمبر 2024",
-      readTime: "11 دقائق",
-      slug: "ai-future-middle-east",
-      featured: false
+  const fetchArticles = async (pageNum = 0, append = false) => {
+    try {
+      if (!append) setLoading(true);
+      else setLoadingMore(true);
+
+      const from = pageNum * articlesPerPage;
+      const to = from + articlesPerPage - 1;
+
+      const { data, error } = await supabase
+        .from('articles')
+        .select('*')
+        .eq('status', 'published')
+        .order('created_at', { ascending: false })
+        .range(from, to);
+
+      if (error) throw error;
+
+      // Transform database data to match our interface
+      // Transformer les données de la base de données pour correspondre à notre interface
+      const transformedArticles: Article[] = (data || []).map(article => ({
+        id: article.id,
+        title: article.title,
+        excerpt: article.excerpt || 'اقرأ المقال للمزيد من التفاصيل',
+        category: 'عام', // Default category if none exists / Catégorie par défaut si aucune n'existe
+        author: 'كاتب مجهول', // Default author if none exists / Auteur par défaut si aucun n'existe
+        date: new Date(article.created_at).toLocaleDateString('ar-SA'),
+        readTime: `${article.reading_time || 5} دقائق`,
+        slug: article.slug,
+        featured: article.is_featured || false
+      }));
+
+      if (append) {
+        setArticles(prev => [...prev, ...transformedArticles]);
+      } else {
+        setArticles(transformedArticles);
+      }
+
+      // Check if there are more articles / Vérifier s'il y a plus d'articles
+      setHasMore(transformedArticles.length === articlesPerPage);
+      
+    } catch (error) {
+      console.error('Error fetching articles:', error);
+      // Add some static fallback articles / Ajouter des articles de secours statiques
+      if (!append && articles.length === 0) {
+        setArticles([
+          {
+            id: '1',
+            title: "دليل المبتدئين لاستخدام ChatGPT في إنشاء المحتوى",
+            excerpt: "تعلم كيفية الاستفادة من قوة الذكاء الاصطناعي لإنشاء محتوى إبداعي ومؤثر باللغة العربية",
+            category: "ذكاء اصطناعي",
+            author: "أحمد التكنولوجي",
+            date: "20 ديسمبر 2024",
+            readTime: "7 دقائق",
+            slug: "guide-chatgpt-content-creation",
+            featured: true
+          },
+          {
+            id: '2',
+            title: "كيف تكتب مقالاً مؤثراً يجذب القراء",
+            excerpt: "تعلم الطرق الفعالة لكتابة محتوى يثير اهتمام جمهورك ويحقق انتشاراً واسعاً على وسائل التواصل الاجتماعي",
+            category: "الكتابة",
+            author: "أحمد بن سالم",
+            date: "15 ديسمبر 2024",
+            readTime: "5 دقائق",
+            slug: "how-to-write-engaging-articles",
+            featured: false
+          }
+        ]);
+      }
+    } finally {
+      setLoading(false);
+      setLoadingMore(false);
     }
-  ];
+  };
+
+  /**
+   * Load more articles / Charger plus d'articles
+   */
+  const loadMoreArticles = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    fetchArticles(nextPage, true);
+  };
+
+  /**
+   * Initialize component by fetching initial articles
+   * Initialiser le composant en récupérant les articles initiaux
+   */
+  useEffect(() => {
+    fetchArticles();
+  }, []);
 
   /**
    * Filter articles by featured status for different display sections
@@ -158,6 +155,20 @@ const BlogArticles = () => {
    */
   const featuredArticles = articles.filter(article => article.featured);
   const regularArticles = articles.filter(article => !article.featured);
+
+  // Loading state / État de chargement
+  if (loading) {
+    return (
+      <section className="py-16 bg-gradient-to-b from-background to-desert-sand/20">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="w-8 h-8 animate-spin text-tunisia-orange" />
+            <span className="mr-3 text-lg">جاري تحميل المقالات...</span>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-16 bg-gradient-to-b from-background to-desert-sand/20">
@@ -273,12 +284,39 @@ const BlogArticles = () => {
           </div>
         </div>
 
+        {/* Load More Articles Button */}
+        {/* Bouton Charger Plus d'Articles */}
+        {hasMore && (
+          <div className="text-center mt-12">
+            <Button 
+              variant="outline" 
+              size="lg" 
+              onClick={loadMoreArticles}
+              disabled={loadingMore}
+            >
+              {loadingMore ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin ml-2" />
+                  جاري التحميل...
+                </>
+              ) : (
+                <>
+                  عرض مقالات أخرى
+                  <ArrowRight className="w-4 h-4" />
+                </>
+              )}
+            </Button>
+          </div>
+        )}
+
         {/* View All Articles Button */}
         {/* Bouton Voir Tous les Articles */}
-        <div className="text-center mt-12">
-          <Button variant="outline" size="lg">
-            عرض جميع المقالات
-            <ArrowRight className="w-4 h-4" />
+        <div className="text-center mt-8">
+          <Button variant="ghost" size="lg" asChild>
+            <Link to="/articles">
+              عرض جميع المقالات
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </Button>
         </div>
       </div>
