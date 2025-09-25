@@ -386,7 +386,6 @@ const Categories = ({ onChatOpen }: CategoriesProps) => {
               <h4 className="font-semibold mb-4">تواصل معنا</h4>
               <ul className="space-y-2 text-white/80">
                 <li>البريد الإلكتروني: info@tunisiehub.com</li>
-                <li>هاتف: +216 70 123 456</li>
                 <li>العنوان: تونس، تونس</li>
               </ul>
             </div>
